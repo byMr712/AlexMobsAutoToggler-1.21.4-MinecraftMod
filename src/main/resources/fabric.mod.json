@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "alexmobsautotoggler",
+  "version": "${version}",
+  "name": "AlexMobs AutoToggler",
+  "description": "Prevent the Alex's Mobs synced-entity-data layout crash on multiplayer servers. This mod shifts incoming serialized data tracker field ids so vanilla (and Alex's Mobs) servers stay compatible, and restores normal behavior when you return to singleplayer.",
+  "authors": [
+    "byMr712"
+  ],
+  "contact": {
+    "sources": "https://github.com/Unknowneth"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/alexmobsautotoggler/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.notunanancyowen.alexmobsautotoggler.AlexMobsAutoToggler"
+    ]
+  },
+  "mixins": [
+    "alexmobsautotoggler.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.4",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
