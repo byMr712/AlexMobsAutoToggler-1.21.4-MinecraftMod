@@ -3,7 +3,7 @@
   "id": "vanillarecipeisolator",
   "version": "${version}",
   "name": "Vanilla Recipe Isolator",
-  "description": "Universal client-side compatibility layer that isolates modded registries and DataTrackers when connecting to vanilla/multiplayer servers. Eliminates block/item ID shifts and entity metadata desyncs while keeping mods fully functional in singleplayer.",
+  "description": "Universal client-side compatibility layer and perfect ViaFabricPlus companion. Isolates modded registries and DataTrackers on vanilla/multiplayer servers, eliminating block/item ID shifts while keeping mods fully functional in singleplayer.",
   "authors": [
     "byMr712"
   ],
