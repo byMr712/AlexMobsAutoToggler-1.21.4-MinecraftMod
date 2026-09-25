@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "vanillarecipeisolator",
+  "id": "modded2vanilla",
   "version": "${version}",
-  "name": "Vanilla Recipe Isolator",
-  "description": "Universal client-side compatibility layer and perfect ViaFabricPlus companion. Isolates modded registries and DataTrackers on vanilla/multiplayer servers, eliminating block/item ID shifts while keeping mods fully functional in singleplayer.",
+  "name": "Modded2Vanilla",
+  "description": "Universal client-side compatibility layer. Seamlessly play with your favorite client content mods and join any vanilla/Paper/Spigot/ViaFabricPlus multiplayer servers without ID shifts, recipe conflicts, or entity tracker crashes.",
   "authors": [
     "byMr712"
   ],
@@ -11,15 +11,15 @@
     "sources": "https://github.com/Unknowneth"
   },
   "license": "Apache-2.0",
-  "icon": "assets/vanillarecipeisolator/icon.png",
+  "icon": "assets/modded2vanilla/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.mr712.vanillarecipeisolator.VanillaRecipeIsolator"
+      "com.mr712.modded2vanilla.Modded2Vanilla"
     ]
   },
   "mixins": [
-    "vanillarecipeisolator.mixins.json"
+    "modded2vanilla.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.0",

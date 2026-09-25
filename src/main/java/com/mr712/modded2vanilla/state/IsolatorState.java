@@ -1,4 +1,4 @@
-package com.mr712.vanillarecipeisolator.state;
+package com.mr712.modded2vanilla.state;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;

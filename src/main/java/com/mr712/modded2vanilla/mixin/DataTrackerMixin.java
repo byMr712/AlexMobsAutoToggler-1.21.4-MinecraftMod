@@ -1,7 +1,7 @@
-package com.mr712.vanillarecipeisolator.mixin;
+package com.mr712.modded2vanilla.mixin;
 
-import com.mr712.vanillarecipeisolator.VanillaRecipeIsolator;
-import com.mr712.vanillarecipeisolator.state.IsolatorState;
+import com.mr712.modded2vanilla.Modded2Vanilla;
+import com.mr712.modded2vanilla.state.IsolatorState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracked;
 import net.minecraft.entity.data.DataTracker;
@@ -35,17 +35,19 @@ public abstract class DataTrackerMixin {
         ),
         require = 0
     )
-    private int vanillaRecipeIsolator$redirectId(DataTracker.SerializedEntry<?> entry, List<?> unusedEntries) {
+    private int modded2Vanilla$redirectId(DataTracker.SerializedEntry<?> entry, List<?> unusedEntries) {
         int originalId = entry.id();
         if (!IsolatorState.isCompensatingDataTracker() || !(this.trackedEntity instanceof LivingEntity)) {
             return originalId;
         }
+        // If the server and client data formats match (e.g. server has the same mod), do not remap!
         if (entryIdMatches(originalId, entry)) {
             return originalId;
         }
+        // Only remap if originalId mismatched and originalId + 1 matches (vanilla server packet on modded client)
         if (entryIdMatches(originalId + 1, entry)) {
-            VanillaRecipeIsolator.LOGGER.debug(
-                "[VanillaRecipeIsolator] Remapping entity data field {} to {} for {}",
+            Modded2Vanilla.LOGGER.debug(
+                "[Modded2Vanilla] Remapping entity data field {} to {} for {}",
                 originalId, originalId + 1, this.trackedEntity
             );
             return originalId + 1;
@@ -54,15 +56,15 @@ public abstract class DataTrackerMixin {
     }
 
     @Inject(method = "copyToFrom", at = @At("HEAD"), cancellable = true, require = 0)
-    private void vanillaRecipeIsolator$guardCopy(
+    private void modded2Vanilla$guardCopy(
         DataTracker.Entry<?> to, DataTracker.SerializedEntry<?> from, CallbackInfo ci
     ) {
         if (!IsolatorState.isCompensatingDataTracker() || !(this.trackedEntity instanceof LivingEntity)) {
             return;
         }
         if (!sameHandler(to.getData(), from.handler())) {
-            VanillaRecipeIsolator.LOGGER.debug(
-                "[VanillaRecipeIsolator] Suppressed incompatible entity data update for {}: {}",
+            Modded2Vanilla.LOGGER.debug(
+                "[Modded2Vanilla] Suppressed incompatible entity data update for {}: {}",
                 this.trackedEntity, from
             );
             ci.cancel();
