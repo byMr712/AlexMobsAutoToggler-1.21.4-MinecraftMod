@@ -2,45 +2,51 @@
 
 # Vanilla Recipe Isolator (Minecraft 1.21.4 Fabric)
 
-Universal client-side mod for **Minecraft 1.21.4 (Fabric)** — the perfect companion for **ViaFabricPlus** and vanilla multiplayer. Provides full mod registry isolation when joining servers to eliminate all visual and network desyncs.
+**Vanilla Recipe Isolator** is a universal client-side mod for **Minecraft 1.21.4 (Fabric)** that allows you to play singleplayer with content mods (adding blocks, mobs, food, weapons, furniture) and **seamlessly connect to any external multiplayer servers (Vanilla, Paper, Purpur, Spigot, Realms, or via ViaFabricPlus)** without having to disable your mods or manage separate launcher profiles.
 
 ---
 
-## 🌟 Perfect Synergy with ViaFabricPlus
+## 🎯 Primary Purpose
 
-If you love playing singleplayer with content mods (new blocks, foods, tools, mobs, and decorations) while also connecting to servers of any version via **ViaFabricPlus** — this mod is made for you!
+When content mods are installed on the client, they register custom blocks, items, and entities into Minecraft's global registries. When attempting to join a regular server (Vanilla, Paper, Spigot, etc.) or a multi-version server via **ViaFabricPlus**, serious desyncs occur:
+- Global block and item IDs get shifted (e.g. vanilla sugar cane or oak logs rendering as custom mod items/blocks).
+- Entity metadata packets break (`Invalid entity data item type`), causing client disconnects/crashes when encountering vanilla entities.
+- Network recipe synchronization gets corrupted.
 
-Client-side content mods normally pollute local registries and break protocol translators. **Vanilla Recipe Isolator** fixes this completely: you can keep all your favorite content mods in your `mods` folder and seamlessly connect via ViaFabricPlus to servers of any version (from **26.x** and **1.21.x** to **1.16**, **1.12**, and **1.8**).
+**Vanilla Recipe Isolator** automatically detects the connection type and isolates mod registries during multiplayer sessions, presenting clean vanilla registry mappings.
 
 ---
 
-## 🛠️ Features & Fixes
+## 🛠️ Features & Behavior
 
-When content mods (such as `tide`, `regs-more-foods`, `StrawBed`, `TotemCraft`, `Alex's Mobs`, etc.) are installed on the client, they register custom blocks, items, and entity fields into the game's shared registries. When joining vanilla servers or using ViaFabricPlus, this causes severe issues:
-
-1. **Block & Chunk Palette ID Shifts (`Block.STATE_IDS`)**:
-   - Custom mod blocks shift the global `Block.STATE_IDS` table. On vanilla servers (or via ViaFabricPlus), blocks get rendered as wrong blocks (e.g. sugar cane renders as budding amethyst, chests look like mod blocks, etc.).
-   - **Vanilla Recipe Isolator** intercepts chunk palette lookups and `Block.STATE_IDS`, supplying the pure vanilla 1.21.4 ID map.
-
+1. **Block & Chunk Palette ID Protection (`Block.STATE_IDS`)**:
+   - Intercepts lookups to the global BlockState ID palette and returns clean 1.21.4 vanilla IDs. This prevents blocks in the world from visually turning into random mod blocks when joining servers.
 2. **Item ID Normalization (`Item.byRawId`)**:
-   - Ensures network item packets strictly use vanilla 1.21.4 raw IDs on multiplayer servers.
-
-3. **Entity `DataTracker` Desync Fix**:
-   - Entity mods (such as `Alex's Mobs`) inject extra tracked fields into `LivingEntity`, causing `IllegalStateException: Invalid entity data item type` crashes on multiplayer servers.
-   - **Vanilla Recipe Isolator** dynamically aligns field indices and suppresses incompatible data updates.
+   - Ensures that item network packets consistently resolve to standard vanilla IDs during multiplayer sessions.
+3. **Entity `DataTracker` Metadata Protection**:
+   - Fixes conflicts when mods (such as custom mob mods) inject additional fields into `LivingEntity`, preventing `IllegalStateException: Invalid entity data item type` crashes.
+4. **Seamless ViaFabricPlus Support**:
+   - When using **ViaFabricPlus**, the mod ensures version translators (spanning **1.8** to **1.21.x** and **26.x**) operate on pristine vanilla IDs rather than mod-shifted palettes.
 
 ---
 
-## 🎮 Behavior Matrix
+## 🎮 Automatic Behavior Matrix
+
+The mod requires zero configuration and works automatically:
 
 | Mode | Behavior |
 |---|---|
-| **ViaFabricPlus (26.x, 1.21.x, 1.16, 1.12, 1.8, etc.)** | Isolation **ACTIVE**: pure vanilla registries are used, ViaFabricPlus works flawlessly |
-| **Vanilla Multiplayer Server** | Isolation **ACTIVE**: all visual and network desyncs eliminated |
+| **Singleplayer** | Isolation **OFF**: all your mod blocks, mobs, recipes, and items function at 100% capacity |
+| **Vanilla Server (Vanilla / Paper / Purpur / Spigot / Realms)** | Isolation **ACTIVE**: you connect cleanly without registry conflicts or crashes |
+| **Connecting via ViaFabricPlus (all versions)** | Isolation **ACTIVE**: version translators operate on pristine vanilla tables |
 | **Modded Server with matching mods** | Synchronized normally via Fabric API |
-| **Singleplayer** | Isolation **OFF**: all custom blocks, items, recipes, and entities from your mods work 100% |
 
-Activation is completely automatic upon joining any server without requiring manual configuration.
+---
+
+## ⚠️ Compatibility Notes
+
+> [!NOTE]
+> The mod isolates standard Minecraft registries (blocks, items, entity metadata). However, certain edge-case mods may introduce invasive low-level network mixins or non-standard class initialization timing. In such rare situations, dedicated compat patches may be required.
 
 ---
 
@@ -55,8 +61,8 @@ Output: `build/libs/VanillaRecipeIsolator-1.21.4-byMr712.jar`.
 ## 🚀 Installation
 
 1. Install **Fabric Loader** (0.16.0+) and **Fabric API** for 1.21.4.
-2. *(Recommended)* Install **ViaFabricPlus** to connect to any server version.
-3. Place `VanillaRecipeIsolator-1.21.4-byMr712.jar` in your `mods/` directory.
+2. Place `VanillaRecipeIsolator-1.21.4-byMr712.jar` in your `mods/` directory.
+3. *(Optional)* Install **ViaFabricPlus** if you plan to connect to servers of different versions.
 4. Launch the game.
 
 ---

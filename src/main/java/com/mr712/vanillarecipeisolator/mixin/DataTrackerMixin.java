@@ -44,7 +44,7 @@ public abstract class DataTrackerMixin {
             return originalId;
         }
         if (entryIdMatches(originalId + 1, entry)) {
-            VanillaRecipeIsolator.LOGGER.info(
+            VanillaRecipeIsolator.LOGGER.debug(
                 "[VanillaRecipeIsolator] Remapping entity data field {} to {} for {}",
                 originalId, originalId + 1, this.trackedEntity
             );
@@ -61,7 +61,7 @@ public abstract class DataTrackerMixin {
             return;
         }
         if (!sameHandler(to.getData(), from.handler())) {
-            VanillaRecipeIsolator.LOGGER.warn(
+            VanillaRecipeIsolator.LOGGER.debug(
                 "[VanillaRecipeIsolator] Suppressed incompatible entity data update for {}: {}",
                 this.trackedEntity, from
             );
