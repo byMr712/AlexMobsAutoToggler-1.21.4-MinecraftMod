@@ -1,4 +1,4 @@
-package com.mr712.vanillaisolator.registry;
+package com.mr712.vanillarecipeisolator.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class VanillaRegistrySnapshot {
-    private static final Logger LOGGER = LoggerFactory.getLogger("VanillaIsolator");
+    private static final Logger LOGGER = LoggerFactory.getLogger("VanillaRecipeIsolator");
 
     private static BlockState[] vanillaIdToBlockState;
     private static Map<BlockState, Integer> vanillaBlockStateToId;
@@ -68,10 +68,10 @@ public final class VanillaRegistrySnapshot {
             vanillaItemToId = itemMap;
 
             initialized = true;
-            LOGGER.info("[VanillaIsolator] Captured vanilla snapshot: {} BlockStates, {} Items.",
+            LOGGER.info("[VanillaRecipeIsolator] Captured vanilla snapshot: {} BlockStates, {} Items.",
                     vanillaIdToBlockState.length, vanillaIdToItem.length);
         } catch (Throwable t) {
-            LOGGER.error("[VanillaIsolator] Failed to build vanilla registry snapshot", t);
+            LOGGER.error("[VanillaRecipeIsolator] Failed to build vanilla registry snapshot", t);
         }
     }
 

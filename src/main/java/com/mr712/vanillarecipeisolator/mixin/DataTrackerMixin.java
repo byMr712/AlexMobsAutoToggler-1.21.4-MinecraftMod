@@ -1,7 +1,7 @@
-package com.mr712.vanillaisolator.mixin;
+package com.mr712.vanillarecipeisolator.mixin;
 
-import com.mr712.vanillaisolator.VanillaIsolator;
-import com.mr712.vanillaisolator.state.IsolatorState;
+import com.mr712.vanillarecipeisolator.VanillaRecipeIsolator;
+import com.mr712.vanillarecipeisolator.state.IsolatorState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracked;
 import net.minecraft.entity.data.DataTracker;
@@ -34,7 +34,7 @@ public abstract class DataTrackerMixin {
             opcode = Opcodes.GETFIELD
         )
     )
-    private int vanillaIsolator$redirectId(DataTracker.SerializedEntry<?> entry, List<?> unusedEntries) {
+    private int vanillaRecipeIsolator$redirectId(DataTracker.SerializedEntry<?> entry, List<?> unusedEntries) {
         int originalId = entry.id();
         if (!IsolatorState.isCompensatingDataTracker() || !(this.trackedEntity instanceof LivingEntity)) {
             return originalId;
@@ -43,8 +43,8 @@ public abstract class DataTrackerMixin {
             return originalId;
         }
         if (entryIdMatches(originalId + 1, entry)) {
-            VanillaIsolator.LOGGER.info(
-                "[VanillaIsolator] Remapping entity data field {} to {} for {}",
+            VanillaRecipeIsolator.LOGGER.info(
+                "[VanillaRecipeIsolator] Remapping entity data field {} to {} for {}",
                 originalId, originalId + 1, this.trackedEntity
             );
             return originalId + 1;
@@ -53,15 +53,15 @@ public abstract class DataTrackerMixin {
     }
 
     @Inject(method = "copyToFrom", at = @At("HEAD"), cancellable = true)
-    private void vanillaIsolator$guardCopy(
+    private void vanillaRecipeIsolator$guardCopy(
         DataTracker.Entry<?> to, DataTracker.SerializedEntry<?> from, CallbackInfo ci
     ) {
         if (!IsolatorState.isCompensatingDataTracker() || !(this.trackedEntity instanceof LivingEntity)) {
             return;
         }
         if (!sameHandler(to.getData(), from.handler())) {
-            VanillaIsolator.LOGGER.warn(
-                "[VanillaIsolator] Suppressed incompatible entity data update for {}: {}",
+            VanillaRecipeIsolator.LOGGER.warn(
+                "[VanillaRecipeIsolator] Suppressed incompatible entity data update for {}: {}",
                 this.trackedEntity, from
             );
             ci.cancel();
