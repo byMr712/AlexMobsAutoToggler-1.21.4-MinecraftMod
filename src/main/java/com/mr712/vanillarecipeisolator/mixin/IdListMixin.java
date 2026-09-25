@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(IdList.class)
 public abstract class IdListMixin<T> {
 
-    @Inject(method = "get", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "get", at = @At("HEAD"), cancellable = true, require = 0)
     private void vanillaRecipeIsolator$redirectGet(int index, CallbackInfoReturnable<T> cir) {
         if (IsolatorState.isIsolating()) {
             if ((Object) this == Block.STATE_IDS) {
@@ -25,7 +25,7 @@ public abstract class IdListMixin<T> {
         }
     }
 
-    @Inject(method = "getRawId", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getRawId", at = @At("HEAD"), cancellable = true, require = 0)
     private void vanillaRecipeIsolator$redirectGetRawId(T value, CallbackInfoReturnable<Integer> cir) {
         if (IsolatorState.isIsolating()) {
             if ((Object) this == Block.STATE_IDS && value instanceof BlockState bs) {

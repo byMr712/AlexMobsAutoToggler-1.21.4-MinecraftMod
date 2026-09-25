@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Block.class)
 public abstract class BlockMixin {
 
-    @Inject(method = "getStateFromRawId", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getStateFromRawId", at = @At("HEAD"), cancellable = true, require = 0)
     private static void vanillaRecipeIsolator$getStateFromRawId(int id, CallbackInfoReturnable<BlockState> cir) {
         if (IsolatorState.isIsolating()) {
             BlockState state = VanillaRegistrySnapshot.getVanillaBlockState(id);
@@ -22,7 +22,7 @@ public abstract class BlockMixin {
         }
     }
 
-    @Inject(method = "getRawIdFromState", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getRawIdFromState", at = @At("HEAD"), cancellable = true, require = 0)
     private static void vanillaRecipeIsolator$getRawIdFromState(BlockState state, CallbackInfoReturnable<Integer> cir) {
         if (IsolatorState.isIsolating()) {
             int id = VanillaRegistrySnapshot.getVanillaBlockStateRawId(state);

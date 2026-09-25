@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Item.class)
 public abstract class ItemMixin {
 
-    @Inject(method = "byRawId", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "byRawId", at = @At("HEAD"), cancellable = true, require = 0)
     private static void vanillaRecipeIsolator$byRawId(int id, CallbackInfoReturnable<Item> cir) {
         if (IsolatorState.isIsolating()) {
             Item item = VanillaRegistrySnapshot.getVanillaItem(id);
@@ -21,7 +21,7 @@ public abstract class ItemMixin {
         }
     }
 
-    @Inject(method = "getRawId", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getRawId", at = @At("HEAD"), cancellable = true, require = 0)
     private static void vanillaRecipeIsolator$getRawId(Item item, CallbackInfoReturnable<Integer> cir) {
         if (IsolatorState.isIsolating()) {
             int id = VanillaRegistrySnapshot.getVanillaItemRawId(item);

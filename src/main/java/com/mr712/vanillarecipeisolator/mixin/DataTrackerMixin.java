@@ -32,7 +32,8 @@ public abstract class DataTrackerMixin {
             value = "FIELD",
             target = "Lnet/minecraft/entity/data/DataTracker$SerializedEntry;id:I",
             opcode = Opcodes.GETFIELD
-        )
+        ),
+        require = 0
     )
     private int vanillaRecipeIsolator$redirectId(DataTracker.SerializedEntry<?> entry, List<?> unusedEntries) {
         int originalId = entry.id();
@@ -52,7 +53,7 @@ public abstract class DataTrackerMixin {
         return originalId;
     }
 
-    @Inject(method = "copyToFrom", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "copyToFrom", at = @At("HEAD"), cancellable = true, require = 0)
     private void vanillaRecipeIsolator$guardCopy(
         DataTracker.Entry<?> to, DataTracker.SerializedEntry<?> from, CallbackInfo ci
     ) {
