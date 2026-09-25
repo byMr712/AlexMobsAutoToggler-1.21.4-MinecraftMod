@@ -1,6 +1,5 @@
 package com.mr712.vanillarecipeisolator;
 
-import com.mr712.vanillarecipeisolator.registry.VanillaRegistrySnapshot;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ public final class VanillaRecipeIsolator implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        VanillaRegistrySnapshot.init();
-        LOGGER.info("Vanilla Recipe Isolator loaded. Modded registries and DataTrackers will be isolated on vanilla/multiplayer servers.");
+        LOGGER.info("Vanilla Recipe Isolator loaded. Modded DataTrackers will be isolated on vanilla/multiplayer servers.");
     }
 }

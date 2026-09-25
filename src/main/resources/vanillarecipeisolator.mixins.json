@@ -4,10 +4,7 @@
   "package": "com.mr712.vanillarecipeisolator.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "BlockMixin",
-    "DataTrackerMixin",
-    "IdListMixin",
-    "ItemMixin"
+    "DataTrackerMixin"
   ],
   "client": [
   ],
