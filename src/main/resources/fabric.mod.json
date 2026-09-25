@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "alexmobsautotoggler",
+  "id": "vanillaisolator",
   "version": "${version}",
-  "name": "AlexMobs AutoToggler",
-  "description": "Prevent the Alex's Mobs synced-entity-data layout crash on multiplayer servers. This mod shifts incoming serialized data tracker field ids so vanilla (and Alex's Mobs) servers stay compatible, and restores normal behavior when you return to singleplayer.",
+  "name": "Vanilla Isolator",
+  "description": "Universal client-side compatibility layer that isolates modded registries and DataTrackers when connecting to vanilla/multiplayer servers. Eliminates block/item ID shifts and entity metadata desyncs while keeping mods fully functional in singleplayer.",
   "authors": [
     "byMr712"
   ],
@@ -11,15 +11,15 @@
     "sources": "https://github.com/Unknowneth"
   },
   "license": "Apache-2.0",
-  "icon": "assets/alexmobsautotoggler/icon.png",
+  "icon": "assets/vanillaisolator/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "com.notunanancyowen.alexmobsautotoggler.AlexMobsAutoToggler"
+      "com.mr712.vanillaisolator.VanillaIsolator"
     ]
   },
   "mixins": [
-    "alexmobsautotoggler.mixins.json"
+    "vanillaisolator.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.16.0",

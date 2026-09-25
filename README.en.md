@@ -1,66 +1,48 @@
-> **Language:** English · [Русский](README.md)
+> **Language:** [Русский](README.md) · English
 
-# AlexMobs AutoToggler (Minecraft 1.21.4 Fabric)
+# Vanilla Isolator (Minecraft 1.21.4 Fabric)
 
-A client-side mod for **Minecraft 1.21.4 (Fabric)** that fixes a protocol error caused by **Alex's Mobs Continued** when connecting to a multiplayer server that does not have the mod installed (while you do).
+Universal client-side mod for **Minecraft 1.21.4 (Fabric)** providing clean compatibility and mod registry isolation when connecting to vanilla and cross-version servers (including ViaFabricPlus).
 
 ---
 
-## About the Mod
+## Features & Fixes
 
-**Alex's Mobs Continued** (Fabric build) registers one extra synced data field on every living entity (`LivingEntity`) on the client. As a result, the tracked-data field ids become "shifted" by one relative to a vanilla (or differently-modded) server.
+When content mods (such as `tide`, `regs-more-foods`, `StrawBed`, `TotemCraft`, `Alex's Mobs`, etc.) are installed on the client, they register custom blocks, items, and entity fields into the game's shared registries. When joining vanilla servers, this causes severe issues:
 
-### The Symptom: crash when joining a server
+1. **Block & Chunk Palette ID Shifts**:
+   - Custom mod blocks shift the global `Block.STATE_IDS` table. On vanilla servers (or via ViaFabricPlus), blocks get rendered as wrong blocks (e.g. sugar cane renders as budding amethyst).
+   - **Vanilla Isolator** intercepts chunk palette lookups and `Block.STATE_IDS`, supplying the pure vanilla 1.21.4 ID map.
 
-On a vanilla multiplayer server the id mismatch breaks entity data sync:
+2. **Item ID Normalization (`Item.byRawId`)**:
+   - Ensures network item packets strictly use vanilla 1.21.4 raw IDs on multiplayer servers.
 
-```
-IllegalStateException: Invalid entity data item type for field 17 ...
-old=false(Boolean), new=0(Integer)
-```
+3. **Entity `DataTracker` Desync Fix**:
+   - Entity mods (such as `Alex's Mobs`) inject extra tracked fields into `LivingEntity`, causing `IllegalStateException: Invalid entity data item type` crashes on vanilla servers.
+   - **Vanilla Isolator** dynamically aligns field indices and suppresses incompatible data updates.
 
-(the fish `fromBucket`/`variant` fields: the server sends an `Integer`, the client expects a `Boolean`).
+---
 
-### The Fix
+## Behavior Matrix
 
-The mod intercepts client-side handling of incoming entity data updates (a mixin into `DataTracker.writeUpdatedEntries`):
-
-- Fields whose type does not match at the current slot but matches at `id + 1` are shifted by `+1` (**self-correcting compensation** — no hard-coded dependency on Alex's Mobs Continued field id);
-- Fields that already match are left untouched;
-- Fully unrecognized entries are skipped and logged instead of crashing.
-
-### Where It Applies
-
-| Situation | Behavior |
+| Mode | Behavior |
 |---|---|
-| Multiplayer server without Alex's Mobs | Server field layout differs from the client's — the mod compensates for the offset |
-| Multiplayer server with Alex's Mobs | The mod is disabled; it does not affect **Alex's Mobs Continued** behavior |
-| Single-player game | The mod is disabled; it does not affect **Alex's Mobs Continued** behavior |
+| **Vanilla Server / ViaFabricPlus (26.x, 1.21.x, etc.)** | Isolation **ACTIVE**: pure vanilla registries are used, eliminating all visual and network desyncs |
+| **Modded Server with matching mods** | Synchronized normally via Fabric API |
+| **Singleplayer** | Isolation **OFF**: all custom blocks, items, and entities from your mods work 100% |
 
-Compensation activates automatically when connecting to any multiplayer server and deactivates automatically in singleplayer (no configuration needed).
+Activation is completely automatic upon joining any server without requiring manual configuration.
 
 ---
 
-## Building
+## Build
 
-```
+```bash
 gradlew build
 ```
 
-Output: `build/libs/AlexMobsAutoToggler-1.21.4-byMr712.jar`.
-
-## Installation
-
-1. Install **Fabric Loader** (0.16.0+) and **Fabric API** for 1.21.4.
-2. Copy `AlexMobsAutoToggler-1.21.4-byMr712.jar` into the `mods/` folder.
-3. Launch the game (requires Java 21).
-
-## Technical Details
-
-- Target methods (Yarn 1.21.4+build.7): `DataTracker.writeUpdatedEntries` and `DataTracker.copyToFrom`.
-- Client-only modification (`environment: client`); the mixin is not applied on a server.
-- Compatibility: Fabric Loader 0.16.0+, Minecraft 1.21.4, Java 21, requires Fabric API.
+Output: `build/libs/VanillaIsolator-1.21.4-byMr712.jar`.
 
 ## License
 
-Licensed under the **Apache License 2.0**.
+Licensed under **Apache License 2.0**.

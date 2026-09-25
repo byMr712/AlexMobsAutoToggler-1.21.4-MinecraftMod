@@ -1,8 +1,12 @@
-package com.notunanancyowen.alexmobsautotoggler.mixin;
+package com.mr712.vanillaisolator.mixin;
 
-import java.util.List;
-import java.util.Objects;
-
+import com.mr712.vanillaisolator.VanillaIsolator;
+import com.mr712.vanillaisolator.state.IsolatorState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.data.DataTracked;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandler;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,14 +15,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.notunanancyowen.alexmobsautotoggler.AlexMobsAutoToggler;
-import com.notunanancyowen.alexmobsautotoggler.TogglerState;
-
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracked;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandler;
+import java.util.List;
+import java.util.Objects;
 
 @Mixin(DataTracker.class)
 public abstract class DataTrackerMixin {
@@ -36,17 +34,17 @@ public abstract class DataTrackerMixin {
             opcode = Opcodes.GETFIELD
         )
     )
-    private int alexmobsautotoggler$redirectId(DataTracker.SerializedEntry<?> entry, List<?> unusedEntries) {
+    private int vanillaIsolator$redirectId(DataTracker.SerializedEntry<?> entry, List<?> unusedEntries) {
         int originalId = entry.id();
-        if (!TogglerState.isCompensating() || !(this.trackedEntity instanceof LivingEntity)) {
+        if (!IsolatorState.isCompensatingDataTracker() || !(this.trackedEntity instanceof LivingEntity)) {
             return originalId;
         }
         if (entryIdMatches(originalId, entry)) {
             return originalId;
         }
         if (entryIdMatches(originalId + 1, entry)) {
-            AlexMobsAutoToggler.LOGGER.info(
-                "[AlexMobsAutoToggler] Remapping entity data field {} to {} for {}",
+            VanillaIsolator.LOGGER.info(
+                "[VanillaIsolator] Remapping entity data field {} to {} for {}",
                 originalId, originalId + 1, this.trackedEntity
             );
             return originalId + 1;
@@ -55,15 +53,15 @@ public abstract class DataTrackerMixin {
     }
 
     @Inject(method = "copyToFrom", at = @At("HEAD"), cancellable = true)
-    private void alexmobsautotoggler$guardCopy(
+    private void vanillaIsolator$guardCopy(
         DataTracker.Entry<?> to, DataTracker.SerializedEntry<?> from, CallbackInfo ci
     ) {
-        if (!TogglerState.isCompensating() || !(this.trackedEntity instanceof LivingEntity)) {
+        if (!IsolatorState.isCompensatingDataTracker() || !(this.trackedEntity instanceof LivingEntity)) {
             return;
         }
         if (!sameHandler(to.getData(), from.handler())) {
-            AlexMobsAutoToggler.LOGGER.warn(
-                "[AlexMobsAutoToggler] Suppressed incompatible entity data update for {}: {}",
+            VanillaIsolator.LOGGER.warn(
+                "[VanillaIsolator] Suppressed incompatible entity data update for {}: {}",
                 this.trackedEntity, from
             );
             ci.cancel();
